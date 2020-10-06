@@ -2,7 +2,7 @@ rem ===Default Values and Initial Load===
 @echo off 
 cls 
 Set name=WinCMD
-Set version=0.1 beta
+Set version=1.0
 Set author=Beef
 
 title %name%, an open-source command line
