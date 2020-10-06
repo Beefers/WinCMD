@@ -67,7 +67,6 @@ echo new - Makes a new window of %name%.
 echo doscmd - Lets you run MS-DOS/Command Prompt commands. This can be used to break WinCMD.
 echo defaultbrowser - Starts your default browser. (Definitely not a shameless plug, nope...)
 echo credits - Displays the credits of this program.
-echo 
 echo.
 goto command
 
