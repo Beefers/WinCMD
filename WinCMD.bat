@@ -26,6 +26,9 @@ rem Command Declarations
 if %input%=="help" (
     goto help
 )
+if %input%=="test" (
+    goto test
+)
 ) else (
     set "error=invalidcommand"
     goto errorhandler
@@ -45,5 +48,10 @@ rem Command Functions
 :help
 echo ==="%name%" Commands===
 echo help - Displays this command list.
+echo.
+goto command
+
+:test
+echo test
 echo.
 goto command
