@@ -124,9 +124,6 @@ if errorlevel 1 (
 if not errorlevel 1 (
     echo git is installed.
 )
-) else (
-    echo unable to determine whether git is installed.
-)
 goto command
 
 :update
