@@ -33,34 +33,35 @@ if %verbosemode%==true (
 title %name%, %slogan%
 echo.
 color a
-set /p "input=%USERNAME%@%name%:~%CD%$ "
+set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
+set "input="%unparsedinput%""
 
 title %name% - %input%
 
 rem Command Declarations
 
-if %input%==help (
+if %input%=="help" (
     goto help
 )
-if %input%==test (
+if %input%=="test" (
     goto test
 )
-if %input%==credits (
+if %input%=="credits" (
     goto credits
 )
-if %input%==reload (
+if %input%=="reload" (
     cmd.exe /C %~0 parameters
 )
-if %input%==defaultbrowser (
+if %input%=="defaultbrowser" (
     goto defaultbrowser
 )
-if %input%==new (
+if %input%=="new" (
     goto new
 )
-if %input%==gittest (
+if %input%=="gittest" (
     goto gittest
 )
-if %input%==cmd (
+if %input%=="cmd" (
     goto cmd
 )
 ) else (
@@ -88,7 +89,7 @@ echo help - Displays this command list.
 echo credits - Displays program credits.
 echo reload - Reloads WinCMD. Useful for debugging.
 echo defaultbrowser - Starts your default browser. (Definitely not a shameless plug, nope...)
-echo doscmd - Allows you to run MS-DOS/Command Prompt commands. Has a new look, courtesy of the rewrite.
+echo cmd - Allows you to run MS-DOS/Command Prompt commands. Has a new look, courtesy of the rewrite.
 echo new - Launches a new window of WinCMD. Now using an improved method!
 echo.
 goto command
