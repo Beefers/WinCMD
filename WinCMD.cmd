@@ -40,7 +40,21 @@ title %name% - %input%
 
 rem Command Declarations
 
+rem Help Command Declarations
 if %input%=="help" (
+    set "unparsedhelp=help"
+    goto help
+)
+if %input%=="help general" (
+    set "unparsedhelp=general"
+    goto help
+)
+if %input%=="help useful" (
+    set "unparsedhelp=useful"
+    goto help
+)
+if %input%=="help experimental" (
+    set "unparsedhelp=experimental"
     goto help
 )
 if %input%=="test" (
@@ -84,13 +98,35 @@ if %error%==invalidcommand (
 rem Command Functions
 
 :help
-echo ===%name% Commands===
-echo help - Displays this command list.
-echo credits - Displays program credits.
-echo reload - Reloads WinCMD. Useful for debugging.
-echo defaultbrowser - Starts your default browser. (Definitely not a shameless plug, nope...)
-echo cmd - Allows you to run MS-DOS/Command Prompt commands. Has a new look, courtesy of the rewrite.
-echo new - Launches a new window of WinCMD. Now using an improved method!
+set "helpvalue="%unparsedhelp%""
+if %helpvalue%=="help" (
+    echo ===%name% Command Categories===
+    echo general - everything that doesn't really fit anywhere else, but is still useful!
+)
+if %helpvalue%=="general" (
+    echo ===%name% commands in %helpvalue% category===
+    echo help - Displays this command list.
+    echo credits - Displays program credits.
+    echo new - Launches a new windows of WinCMD. Now using an improved method!
+)
+if %helpvalue%=="useful" (
+    echo ===%name% commands in %helpvalue% category===
+    echo defaultbrowser - Starts your default browser. (Definitely not a shameless plug, nope...)
+    echo reload - Reloads WinCMD. Useful for debugging.
+    echo cmd - Allows you to run MS-DOS/Command Prompt commands. Has a new look, courtesy of the rewrite.
+)
+if %helpvalue%=="experimental" (
+    if %enableexperiments%==true (
+        echo ===%name% commands in %helpvalue% category===
+        echo commands in this category may be incomplete or non-functional. command comments are also not final and therefore may be informal.
+        echo test - prints a test string. included during the early stages of the rewrite.
+        echo gittest - tests for git on your machine.
+        echo update - incomplete.
+    )
+    ) ELSE (
+        echo Experiments are not enabled! This category is inaccessible.
+    )
+)
 echo.
 goto command
 
