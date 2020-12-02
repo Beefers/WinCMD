@@ -3,17 +3,24 @@ rem Initial Load
 rem Variables
 
 rem Verbose Mode - Displays debug messages. Default value is "false" and options are: "false, true"
-Set "verbosemode=false"
+Set "verbosemode=false" >NUL
 
 rem Experiments - Enables experimental functionality e.g. commands. Default value is "false" and options are: "false, true"
-Set "enableexperiments=false"
+Set "enableexperiments=false" >NUL
+
+rem ShellStyle - Toggles the new design for the shell, which resembles zsh. If you want, you can go back to the old bash-inspired style
+Set "shellstyle=zsh" >NUL
 
 @echo off
+chcp 65001 >NUL
 cls 
-Set "name=WinCMD"
-Set "version=0.1 rewrite"
-Set "author=Beef"
-Set "slogan=an open-source command line"
+Set "name=WinCMD" >NUL
+Set "version=0.1 rewrite" >NUL
+Set "author=Beef" >NUL
+Set "slogan=an open-source command line" >NUL
+
+title %name%, %slogan%
+color a
 
 echo Welcome to %name%, %slogan%.
 echo This is a beta product.
@@ -23,6 +30,11 @@ if %verbosemode%==true (
     echo DEBUG: Initial Load completed successfully
 )
 
+:zshecho
+echo.
+echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
+goto zshinput
+
 rem Command Handler
 
 :command
@@ -30,11 +42,22 @@ rem Command Handler
 if %verbosemode%==true (
     echo DEBUG: Command handler loaded successfully
 )
+
 title %name%, %slogan%
-echo.
-color a
-set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
-set "input="%unparsedinput%""
+
+if %shellstyle%==zsh (
+    goto zshecho
+    :zshinput
+    set /p "unparsedinput=└─$ "
+    set "input="%unparsedinput%""
+    echo.
+)
+if %shellstyle%==bash (
+    echo.
+    set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
+    set "input="%unparsedinput%""
+    echo.
+)
 
 title %name% - %input%
 
@@ -163,42 +186,87 @@ goto command
 :settings
 echo ===%name% Settings===
 echo Which setting would you like to change?
-echo The options are: verbosemode and enableexperiments
-set /p "unparsedsetting=Input setting here: "
+echo The options are: verbosemode, enableexperiments and shellstyle
+set /p "unparsedsetting=Enter setting here: "
 set "setting="%unparsedsetting%""
+echo.
+goto settingscheck
+
+:settingscheck
 if %setting%=="verbosemode" (
-    echo The options for this setting are: true, false. Which would you like to set it to?
-    echo Current value is: %verbosemode%
-    set /p "unparsedoption=Input option here: "
-    set "option="%unparsedoption%""
-    if %option%=="true" (
-    set verbosemode==true
-    echo Done! The setting verbosemode now has a value of: %verbosemode%
-    goto command
-)
-    if %option%=="false" (
-    set verbosemode==false
-    echo Done! The setting verbosemode now has a value of: %verbosemode%
-    goto command
-)
+    goto changeverbose
 )
 if %setting%=="enableexperiments" (
-    echo The options for this setting are: true, false. Which would you like to set it to?
-    echo Current value is: %enableexperiments%
-    set /p "unparsedoption=Input option here: "
-    set "option="%unparsedoption%""
-    if %option%=="true" (
-    set enableexperiments==true
-    echo Done! The setting verbosemode now has a value of: %enableexperiments%
+    goto changeexperiments
+)
+if %setting%=="shellstyle" (
+    goto changeshellstyle
+)
+) ELSE (
+    echo That was not a valid setting.
     goto command
 )
-    if %option%=="false" (
-    set enableexperiments==false
-    echo Done! The setting verbosemode now has a value of: %enableexperiments%
+
+:changeverbose
+echo You have chosen to change the setting: %setting%
+echo The valid values for that setting are: true, false. The default is false.
+set /p "unparsedoption=Enter option here: "
+set "option="%unparsedoption%""
+echo.
+if %option%=="true" (
+    set "verbosemode=true"
+    echo Successfully changed setting verbosemode. New value is: true
     goto command
-)  
-) ELSE (
-    echo That was not a valid setting. Your options are verbosemode or enableexperiments.
+)
+if %option%=="false" (
+    set "verbosemode=false"
+    echo Successfully changed setting verbosemode. New value is: false
+    goto command
+)
+) else (
+    echo That was not a valid option for verbosemode.
+    goto command
+)
+
+:changeexperiments
+echo You have chosen to change the setting: %setting%
+echo The valid values for that setting are: true, false. The default is false.
+set /p "unparsedoption=Enter option here: "
+set "option="%unparsedoption%""
+echo.
+if %option%=="true" (
+    set "enableexperiments=true"
+    echo Successfully changed setting enableexperiments. New value is: true
+    goto command
+)
+if %option%=="false" (
+    set "enableexperiments=false"
+    echo Successfully changed setting enableexperiments. New value is: false
+    goto command
+)
+) else (
+    echo That was not a valid option for enableexperiments.
+    goto command
+)
+
+:changeshellstyle
+echo You have chosen to change the setting: %setting%
+echo The valid values for that setting are: zsh, bash. The default is zsh.
+set /p "unparsedoption=Enter option here: "
+set "option="%unparsedoption%""
+echo.
+if %option%=="zsh" (
+    set "shellstyle=zsh"
+    echo Successfully changed setting shellstyle. New value is: zsh
+    goto command
+)
+if %option%=="bash" (
+    set "shellstyle=bash"
+    echo Successfully changed setting shellstyle. New value is: bash
+    goto command
+)
+) else (
+    echo That was not a valid option for shellstyle.
     goto command
 )
 
