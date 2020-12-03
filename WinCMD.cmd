@@ -1,26 +1,26 @@
-rem Initial Load
+@REM Initial Load
 
-rem Variables
+@REM Variables
 
-rem Verbose Mode - Displays debug messages. Default value is "false" and options are: "false, true"
+@REM Verbose Mode - Displays debug messages. Default value is "false" and options are: "false, true"
 Set "verbosemode=false" >NUL
 
-rem Experiments - Enables experimental functionality e.g. commands. Default value is "false" and options are: "false, true"
+@REM Experiments - Enables experimental functionality e.g. commands. Default value is "false" and options are: "false, true"
 Set "enableexperiments=false" >NUL
 
-rem ShellStyle - Toggles the new design for the shell, which resembles zsh. If you want, you can go back to the old bash-inspired style
-Set "shellstyle=zsh" >NUL
+@REM ShellStyle - Toggles the new design for the shell, which resembles zsh. If you want, you can go back to the old bash-inspired style. This will be implemented soon.
+@REM Set "shellstyle=zsh" >NUL
 
 @echo off
+setlocal enableextensions >NUL
 chcp 65001 >NUL
 cls 
 Set "name=WinCMD" >NUL
-Set "version=0.1 rewrite" >NUL
+Set "version=1.0r" >NUL
 Set "author=Beef" >NUL
 Set "slogan=an open-source command line" >NUL
 
 title %name%, %slogan%
-color a
 
 echo Welcome to %name%, %slogan%.
 echo This is a beta product.
@@ -30,40 +30,48 @@ if %verbosemode%==true (
     echo DEBUG: Initial Load completed successfully
 )
 
-:zshecho
-echo.
-echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
-goto zshinput
+@REM :zsh
+@REM echo.
+@REM echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
+@REM set /p "unparsedinput=└─$ "
+@REM set "input="%unparsedinput%""
+@REM echo.
 
-rem Command Handler
+@REM :bash
+@REM echo.
+@REM set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
+@REM set "input="%unparsedinput%""
+@REM echo.
+
+@REM Command Handler
 
 :command
 
 if %verbosemode%==true (
+    echo.
     echo DEBUG: Command handler loaded successfully
 )
 
 title %name%, %slogan%
 
-if %shellstyle%==zsh (
-    goto zshecho
-    :zshinput
-    set /p "unparsedinput=└─$ "
-    set "input="%unparsedinput%""
-    echo.
-)
-if %shellstyle%==bash (
-    echo.
-    set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
-    set "input="%unparsedinput%""
-    echo.
-)
+@REM This code will be implemented soon.
+@REM if %shellstyle%==zsh (
+@REM     goto zsh
+@REM )
+@REM if %shellstyle%==bash (
+@REM     goto bash
+@REM )
 
+color a
+echo.
+echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
+set /p "unparsedinput=└─$ "
+set "input="%unparsedinput%""
 title %name% - %input%
 
-rem Command Declarations
+@REM Command Declarations
 
-rem Help Command Declarations
+@REM Help Command Declarations
 if %input%=="help" (
     set "unparsedhelp=help"
     goto help
@@ -115,7 +123,7 @@ if %input%=="cmd" (
     goto errorhandler
 )
 
-rem Error Handler
+@REM Error Handler
 
 :errorhandler
 echo ===%name% Error Handler===
@@ -127,7 +135,7 @@ if %error%==invalidcommand (
     echo Unknown error code. If you see this, contact a dev!
 )
 
-rem Command Functions
+@REM Command Functions
 
 :help
 set "helpvalue="%unparsedhelp%""
@@ -143,6 +151,7 @@ if %helpvalue%=="general" (
     echo ===%name% commands in %helpvalue% category===
     echo help - Displays this command list.
     echo credits - Displays program credits.
+    echo settings - Lets you change all of WinCMD's variables. This will play a huge part soon.
     echo new - Launches a new windows of WinCMD. Now using an improved method!
     echo clear - Clears the screen.
 )
@@ -161,7 +170,6 @@ if %helpvalue%=="experimental" (
         echo update - incomplete.
     )
 )
-echo.
 goto command
 
 :credits
@@ -186,7 +194,7 @@ goto command
 :settings
 echo ===%name% Settings===
 echo Which setting would you like to change?
-echo The options are: verbosemode, enableexperiments and shellstyle
+echo The options are: verbosemode, enableexperiments
 set /p "unparsedsetting=Enter setting here: "
 set "setting="%unparsedsetting%""
 echo.
@@ -199,9 +207,10 @@ if %setting%=="verbosemode" (
 if %setting%=="enableexperiments" (
     goto changeexperiments
 )
-if %setting%=="shellstyle" (
-    goto changeshellstyle
-)
+@REM if %setting%=="shellstyle" (
+@REM     goto changeshellstyle
+@REM )
+@REM Coming soon...
 ) ELSE (
     echo That was not a valid setting.
     goto command
@@ -249,26 +258,26 @@ if %option%=="false" (
     goto command
 )
 
-:changeshellstyle
-echo You have chosen to change the setting: %setting%
-echo The valid values for that setting are: zsh, bash. The default is zsh.
-set /p "unparsedoption=Enter option here: "
-set "option="%unparsedoption%""
-echo.
-if %option%=="zsh" (
-    set "shellstyle=zsh"
-    echo Successfully changed setting shellstyle. New value is: zsh
-    goto command
-)
-if %option%=="bash" (
-    set "shellstyle=bash"
-    echo Successfully changed setting shellstyle. New value is: bash
-    goto command
-)
-) else (
-    echo That was not a valid option for shellstyle.
-    goto command
-)
+@REM :changeshellstyle
+@REM echo You have chosen to change the setting: %setting%
+@REM echo The valid values for that setting are: zsh, bash. The default is zsh.
+@REM set /p "unparsedoption=Enter option here: "
+@REM set "option="%unparsedoption%""
+@REM echo.
+@REM if %option%=="zsh" (
+@REM     set "shellstyle=zsh"
+@REM     echo Successfully changed setting shellstyle. New value is: zsh
+@REM     goto command
+@REM )
+@REM if %option%=="bash" (
+@REM     set "shellstyle=bash"
+@REM     echo Successfully changed setting shellstyle. New value is: bash
+@REM     goto command
+@REM )
+@REM ) else (
+@REM     echo That was not a valid option for shellstyle.
+@REM     goto command
+@REM )
 
 :new
 start cmd.exe /C %~0 parameters
@@ -277,6 +286,9 @@ goto command
 :clear
 cls
 goto command
+
+:changelog
+echo ===%name% Changelog===
 
 :gittest
 if %enableexperiments%==true (
