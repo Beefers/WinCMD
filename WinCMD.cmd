@@ -9,7 +9,7 @@ Set "verbosemode=false" >NUL
 Set "enableexperiments=false" >NUL
 
 @REM ShellStyle - Toggles the new design for the shell, which resembles zsh. If you want, you can go back to the old bash-inspired style. This will be implemented soon.
-@REM Set "shellstyle=zsh" >NUL
+Set "shellstyle=zsh" >NUL
 
 @echo off
 setlocal enableextensions >NUL
@@ -23,55 +23,48 @@ Set "slogan=an open-source command line" >NUL
 title %name%, %slogan%
 
 echo Welcome to %name%, %slogan%.
-echo This is a beta product.
-echo Everything you see here is subject to change at any time, without warning.
-echo To get started, type help.
+echo Type help to get started.
 if %verbosemode%==true (
     echo DEBUG: Initial Load completed successfully
 )
 
-@REM :zsh
-@REM echo.
-@REM echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
-@REM set /p "unparsedinput=└─$ "
-@REM set "input="%unparsedinput%""
-@REM echo.
-
-@REM :bash
-@REM echo.
-@REM set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
-@REM set "input="%unparsedinput%""
-@REM echo.
-
-@REM Command Handler
-
+@REM Command Handler (REWRITING)
+@REM Initial Checks and Adjustments
 :command
-
 if %verbosemode%==true (
     echo.
-    echo DEBUG: Command handler loaded successfully
+    echo DEBUG: Command handler initial checks completed successfully
+)
+title %name%, %slogan%
+color a
+goto shellstyleprocessing
+
+@REM Shell-Style Processing
+:shellstyleprocessing
+echo.
+if %shellstyle%==zsh (
+    goto stylezsh
+)
+if %shellstyle%==bash (
+    goto stylebash
 )
 
-title %name%, %slogan%
-
-@REM This code will be implemented soon.
-@REM if %shellstyle%==zsh (
-@REM     goto zsh
-@REM )
-@REM if %shellstyle%==bash (
-@REM     goto bash
-@REM )
-
-color a
-echo.
+@REM Shell-Styles
+:stylezsh
 echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
 set /p "unparsedinput=└─$ "
+goto inputprocessing
+
+:stylebash
+Set /p "unparsedinput=%USERNAME%@%name%:~%CD%$ "
+goto inputprocessing
+
+
+@REM Input Processing
+:inputprocessing
 set "input="%unparsedinput%""
 title %name% - %input%
 
-@REM Command Declarations
-
-@REM Help Command Declarations
 if %input%=="help" (
     set "unparsedhelp=help"
     goto help
@@ -194,7 +187,7 @@ goto command
 :settings
 echo ===%name% Settings===
 echo Which setting would you like to change?
-echo The options are: verbosemode, enableexperiments
+echo The options are: verbosemode, enableexperiments, shellstyle
 set /p "unparsedsetting=Enter setting here: "
 set "setting="%unparsedsetting%""
 echo.
@@ -207,10 +200,9 @@ if %setting%=="verbosemode" (
 if %setting%=="enableexperiments" (
     goto changeexperiments
 )
-@REM if %setting%=="shellstyle" (
-@REM     goto changeshellstyle
-@REM )
-@REM Coming soon...
+if %setting%=="shellstyle" (
+    goto changeshellstyle
+)
 ) ELSE (
     echo That was not a valid setting.
     goto command
@@ -258,26 +250,26 @@ if %option%=="false" (
     goto command
 )
 
-@REM :changeshellstyle
-@REM echo You have chosen to change the setting: %setting%
-@REM echo The valid values for that setting are: zsh, bash. The default is zsh.
-@REM set /p "unparsedoption=Enter option here: "
-@REM set "option="%unparsedoption%""
-@REM echo.
-@REM if %option%=="zsh" (
-@REM     set "shellstyle=zsh"
-@REM     echo Successfully changed setting shellstyle. New value is: zsh
-@REM     goto command
-@REM )
-@REM if %option%=="bash" (
-@REM     set "shellstyle=bash"
-@REM     echo Successfully changed setting shellstyle. New value is: bash
-@REM     goto command
-@REM )
-@REM ) else (
-@REM     echo That was not a valid option for shellstyle.
-@REM     goto command
-@REM )
+:changeshellstyle
+echo You have chosen to change the setting: %setting%
+echo The valid values for that setting are: zsh, bash. The default is zsh.
+set /p "unparsedoption=Enter option here: "
+set "option="%unparsedoption%""
+echo.
+if %option%=="zsh" (
+    set "shellstyle=zsh"
+    echo Successfully changed setting shellstyle. New value is: zsh
+    goto command
+)
+if %option%=="bash" (
+    set "shellstyle=bash"
+    echo Successfully changed setting shellstyle. New value is: bash
+    goto command
+)
+) else (
+    echo That was not a valid option for shellstyle.
+    goto command
+)
 
 :new
 start cmd.exe /C %~0 parameters
