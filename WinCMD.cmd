@@ -8,15 +8,18 @@ Set "verbosemode=false" >NUL
 @REM Experiments - Enables experimental functionality e.g. commands. Default value is "false" and options are: "false, true"
 Set "enableexperiments=false" >NUL
 
-@REM ShellStyle - Toggles the new design for the shell, which resembles zsh. If you want, you can go back to the old bash-inspired style. This will be implemented soon.
+@REM ShellStyle - Changes the design of the shell from the new one to the old one. Default value is "zsh" and options are: "zsh, bash"
 Set "shellstyle=zsh" >NUL
+
+@REM Theme - The design of the CLI, including background colors and text colors. Default value is "wincmd" and options are: "wincmd, dark, light, aperture, lemonade, powershell"
+Set "theme=wincmd" >NUL
 
 @echo off
 setlocal enableextensions >NUL
 chcp 65001 >NUL
 cls 
 Set "name=WinCMD" >NUL
-Set "version=1.0r" >NUL
+Set "version=1.1r" >NUL
 Set "author=Beef" >NUL
 Set "slogan=an open-source command line" >NUL
 
@@ -31,17 +34,45 @@ if %verbosemode%==true (
 @REM Command Handler (REWRITING)
 @REM Initial Checks and Adjustments
 :command
+title %name%, %slogan%
 if %verbosemode%==true (
     echo.
     echo DEBUG: Command handler initial checks completed successfully
 )
-title %name%, %slogan%
-color a
+goto themeprocessing
+
+@REM Theme Processing
+:themeprocessing
+echo.
+if %theme%==wincmd (
+    color 0a
+)
+if %theme%==dark (
+    color 07
+)
+if %theme%==light (
+    color f0
+)
+if %theme%==aperture (
+    color 06
+)
+if %theme%==lemonade (
+    color 0E
+)
+if %theme%==powershell (
+    color 1f
+)
+if %verbosemode%==true (
+    echo DEBUG: Theme processing completed successfully
+)
 goto shellstyleprocessing
 
 @REM Shell-Style Processing
 :shellstyleprocessing
 echo.
+if %verbosemode%==true (
+    echo DEBUG: Shell-style processing completed successfully
+)
 if %shellstyle%==zsh (
     goto stylezsh
 )
@@ -51,6 +82,10 @@ if %shellstyle%==bash (
 
 @REM Shell-Styles
 :stylezsh
+if %verbosemode%==true (
+    echo.
+    echo DEBUG: Shell-Style %shellstyle% loaded successfully
+)
 echo ┌──(%USERNAME%@%ComputerName%)-[~%CD%]
 set /p "unparsedinput=└─$ "
 goto inputprocessing
@@ -64,6 +99,10 @@ goto inputprocessing
 :inputprocessing
 set "input="%unparsedinput%""
 title %name% - %input%
+if %verbosemode%==true (
+    echo.
+    echo DEBUG: Input processing completed successfully
+)
 
 if %input%=="help" (
     set "unparsedhelp=help"
@@ -102,6 +141,9 @@ if %input%=="new" (
 if %input%=="clear" (
     goto clear
 )
+if %input%=="changelog" (
+    goto changelog
+)
 if %input%=="update" (
     goto update
 )
@@ -124,6 +166,10 @@ if %error%==invalidcommand (
     echo That was not a valid command.
     goto command
 )
+if %error%==invalidsetting (
+    echo That was not a valid setting.
+    goto command
+)
 ) else (
     echo Unknown error code. If you see this, contact a dev!
 )
@@ -144,9 +190,10 @@ if %helpvalue%=="general" (
     echo ===%name% commands in %helpvalue% category===
     echo help - Displays this command list.
     echo credits - Displays program credits.
-    echo settings - Lets you change all of WinCMD's variables. This will play a huge part soon.
-    echo new - Launches a new windows of WinCMD. Now using an improved method!
+    echo settings - Lets you change all of WinCMD's variables.
+    echo new - Launches a new window of WinCMD. Now using an improved method!
     echo clear - Clears the screen.
+    echo changelog - Shows WinCMD's changlelog in the most recent update.
 )
 if %helpvalue%=="useful" (
     echo ===%name% commands in %helpvalue% category===
@@ -187,7 +234,7 @@ goto command
 :settings
 echo ===%name% Settings===
 echo Which setting would you like to change?
-echo The options are: verbosemode, enableexperiments, shellstyle
+echo The options are: verbosemode, enableexperiments, shellstyle, theme
 set /p "unparsedsetting=Enter setting here: "
 set "setting="%unparsedsetting%""
 echo.
@@ -203,9 +250,12 @@ if %setting%=="enableexperiments" (
 if %setting%=="shellstyle" (
     goto changeshellstyle
 )
+if %setting%=="theme" (
+    goto changetheme
+)
 ) ELSE (
-    echo That was not a valid setting.
-    goto command
+    set "error=invalidsetting"
+    goto errorhandler
 )
 
 :changeverbose
@@ -271,6 +321,47 @@ if %option%=="bash" (
     goto command
 )
 
+:changetheme
+echo You have chosen to change the setting: %setting%
+echo The valid values for that setting are: wincmd, dark, light, aperture, lemonade, powershell. The default is wincmd.
+set /p "unparsedoption=Enter option here: "
+set "option="%unparsedoption%""
+echo.
+if %option%=="wincmd" (
+    set "theme=wincmd"
+    echo Successfully changed setting theme. New value is: wincmd
+    goto command
+)
+if %option%=="dark" (
+    set "theme=dark"
+    echo Successfully changed setting theme. New value is: dark
+    goto command
+)
+if %option%=="light" (
+    set "theme=light"
+    echo Successfully changed setting theme. New value is: light
+    goto command
+)
+if %option%=="aperture" (
+    set "theme=aperture"
+    echo Successfully changed setting theme. New value is: aperture
+    goto command
+)
+if %option%=="lemonade" (
+    set "theme=lemonade"
+    echo Successfully changed setting theme. New value is: lemonade
+    goto command
+)
+if %option%=="powershell" (
+    set "theme=powershell"
+    echo Successfully changed setting theme. New value is: powershell
+    goto command
+)
+) else (
+    echo That was not a valid option for theme.
+    goto command
+)
+
 :new
 start cmd.exe /C %~0 parameters
 goto command
@@ -281,6 +372,14 @@ goto command
 
 :changelog
 echo ===%name% Changelog===
+echo ===Version %version%===
+echo * Added Themes and ShellStyle! Found within the settings command, which also allows you to change many other options.
+echo * Rewrote/reorganised the command handler to allow for ShellStyle and Themes, and to make it easier to work with.
+echo * Optimised load time, and cleaned up the file.
+echo * Other general fixes to functionality and to comments.
+echo ===Sneak Peek===
+echo Next update, more overhauls will come to crucial parts of WinCMD, such as the Error Handler. There will also be ways to install WinCMD to system32, and potentially, plugins!
+echo The update should arrive any time this week, with betas being released regularly.
 
 :gittest
 if %enableexperiments%==true (
@@ -303,7 +402,6 @@ goto command
 
 :cmd
 title [%name%] Command Prompt
-color 7
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
 echo.
 echo Microsoft Windows [Version %VERSION%]
