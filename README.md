@@ -2,7 +2,7 @@
 
 ## Changelog
 
-## Version 1.1r
+### Version 1.1r
 * Added Themes and ShellStyle! Found within the settings command, which also allows you to change many other options.
 * Rewrote/reorganised the command handler to allow for ShellStyle and Themes, and to make it easier to work with.
 * Optimised load time, and cleaned up the file.
