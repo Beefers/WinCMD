@@ -153,6 +153,9 @@ if %input%=="gittest" (
 if %input%=="cmd" (
     goto cmd
 )
+if %input%==%pcmd% (
+    goto plugin
+)
 ) else (
     set "error=invalidcommand"
     goto errorhandler
@@ -393,6 +396,21 @@ if not errorlevel 1 (
 )
 )
 goto command
+
+:load
+call %userprofile%\Desktop\wincmdplugins\testplugin.cmd
+echo You just loaded: %pluginname%, %plugindescription%
+set "pcmd="%plugincmd%""
+
+:plugin
+if defined %pcmd% (
+    %line1%
+    %line2%
+)
+) else (
+    set "error=invalidcommand"
+    goto errorhandler
+)
 
 :update
 if %enableexperiments%==true (
