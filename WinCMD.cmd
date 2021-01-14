@@ -1,3 +1,5 @@
+@echo off
+
 @REM Initial Load
 
 @REM Variables
@@ -14,7 +16,6 @@ Set "shellstyle=zsh" >NUL
 @REM Theme - The design of the CLI, including background colors and text colors. Default value is "wincmd" and options are: "wincmd, dark, light, aperture, lemonade, powershell"
 Set "theme=wincmd" >NUL
 
-@echo off
 setlocal enableextensions >NUL
 chcp 65001 >NUL
 cls 
