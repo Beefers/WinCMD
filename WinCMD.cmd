@@ -1,8 +1,23 @@
-@echo off
-
 @REM Initial Load
 
+@REM Start-up Tasks
+@echo off
+setlocal enableextensions >NUL
+chcp 65001 >NUL
+
 @REM Variables
+
+@REM Name - The name displayed around the program. This was made dynamic to allow for easy forking. Default value is "WinCMD".
+Set "name=WinCMD" >NUL
+
+@REM Version - The version string displayed around the program.
+Set "version=1.1r" >NUL
+
+@REM Author - The name of the program's author. This was made dynamic to allow for easy forking. Default value is "Beef" (Hey, that's me!)
+Set "author=Beef" >NUL
+
+@REM Slogan - The program's slogan, usually displayed after the Name variable. This was made dynamic to allow for easy forking. Default value is "an open-source command line".
+Set "slogan=an open-source command line" >NUL
 
 @REM Verbose Mode - Displays debug messages. Default value is "false" and options are: "false, true"
 Set "verbosemode=false" >NUL
@@ -16,25 +31,85 @@ Set "shellstyle=zsh" >NUL
 @REM Theme - The design of the CLI, including background colors and text colors. Default value is "wincmd" and options are: "wincmd, dark, light, aperture, lemonade, powershell"
 Set "theme=wincmd" >NUL
 
-setlocal enableextensions >NUL
-chcp 65001 >NUL
-cls 
-Set "name=WinCMD" >NUL
-Set "version=1.1r" >NUL
-Set "author=Beef" >NUL
-Set "slogan=an open-source command line" >NUL
-
-title %name%, %slogan%
-
-echo Welcome to %name%, %slogan%.
-echo Type help to get started.
-if %verbosemode%==true (
-    echo DEBUG: Initial Load completed successfully
+:checkarch
+if %PROCESSOR_ARCHITECTURE%==AMD64 (
+    set "arch=AMD64"
+)
+if %PROCESSOR_ARCHITECTURE%==IA64 (
+    set "arch=IA64"
+)
+if %PROCESSOR_ARCHITECTURE%==ARM64 (
+    set "arch=ARM64"
+)
+if %PROCESSOR_ARCHITECTURE%==EM64T (
+    set "arch=EM64T"
+)
+if %PROCESSOR_ARCHITECTURE%==X86 (
+    set "arch=X86"
 )
 
-@REM Command Handler (REWRITING)
+cls
+echo Welcome to %name%, %slogan%.
+echo Type help to get started.
+if %arch%==AMD64 (
+    goto amd64
+)
+if %arch%==IA64 (
+    goto ia64
+)
+if %arch%==ARM64 (
+    goto arm64
+)
+if %arch%==EM64T (
+    goto em64t
+)
+if %arch%==X86 (
+    goto x86
+)
+
+:amd64
+if %verbosemode%==true (
+    echo DEBUG: Processor Architecture is AMD64, continuing without warning prompt.
+)
+goto command
+
+:ia64
+if %verbosemode%==true (
+    echo DEBUG: Processor Architecture is IA64, warning user.
+)
+echo You are running %name% on an untested processor architecture, IA64.
+echo The program will still run, but we cannot guarantee everything will work as intended.
+goto command
+
+:arm64
+if %verbosemode%==true (
+    echo DEBUG: Processor Architecture is ARM64, warning user.
+)
+echo You are running %name% on an untested processor architecture, ARM64.
+echo The program will still run, but we cannot guarantee everything will work as intended.
+goto command
+
+:em64t
+if %verbosemode%==true (
+    echo DEBUG: Processor Architecture is EM64T, warning user.
+)
+echo You are running %name% on an untested processor architecture, EM64T.
+echo The program will still run, but we cannot guarantee everything will work as intended.
+goto command
+
+:x86
+if %verbosemode%==true (
+    echo DEBUG: Processor Architecture is x86, continuing without warning prompt.
+)
+goto command
+
+@REM Command Handler
 @REM Initial Checks and Adjustments
 :command
+if %verbosemode%==true (
+    echo.
+    echo DEBUG: Initial Load completed successfully
+)
 title %name%, %slogan%
 if %verbosemode%==true (
     echo.
@@ -154,9 +229,10 @@ if %input%=="gittest" (
 if %input%=="cmd" (
     goto cmd
 )
-if %input%==%pcmd% (
-    goto plugin
-)
+@REM Might be finished in a later release.
+@REM if %input%==%pcmd% (
+@REM     goto plugin
+@REM )
 ) else (
     set "error=invalidcommand"
     goto errorhandler
