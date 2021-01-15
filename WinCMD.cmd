@@ -77,7 +77,7 @@ if %arch%==X86 (
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is AMD64, continuing without warning prompt.
 )
-goto devcheck
+goto finishload
 
 :ia64
 if %verbosemode%==true (
@@ -85,7 +85,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, IA64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto devcheck
+goto finishload
 
 :arm64
 if %verbosemode%==true (
@@ -93,7 +93,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, ARM64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto devcheck
+goto finishload
 
 :em64t
 if %verbosemode%==true (
@@ -101,23 +101,11 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, EM64T.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto devcheck
+goto finishload
 
 :x86
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is x86, continuing without warning prompt.
-)
-goto devcheck
-
-:devcheck
-if %TERM_PROGRAM%==vscode (
-    echo.
-    echo Hello! We've determined that you're running %name% in the VSCode integrated terminal.
-    echo Because of this, we'll assume you're developing!
-    echo We've automatically set a few variables to true in order to assist your development: verbosemode and enableexperiments.
-    echo Enjoy!
-    Set "verbosemode=true" >NUL
-    Set "enableexperiments=true" >NUL
 )
 goto finishload
 
@@ -291,15 +279,15 @@ if %helpvalue%=="general" (
     echo ===%name% commands in %helpvalue% category===
     echo help - Displays this command list.
     echo credits - Displays program credits.
-    echo settings - Lets you change all of WinCMD's variables.
-    echo new - Launches a new window of WinCMD. Now using an improved method!
+    echo settings - Lets you change all of %name%'s variables.
+    echo new - Launches a new window of %name%. Now using an improved method!
     echo clear - Clears the screen.
-    echo changelog - Shows WinCMD's changlelog in the most recent update.
+    echo changelog - Shows %name%'s changelog in the most recent update.
 )
 if %helpvalue%=="useful" (
     echo ===%name% commands in %helpvalue% category===
     echo defaultbrowser - Starts your default browser. Definitely not a shameless plug, nope...
-    echo reload - Reloads WinCMD. Useful for debugging.
+    echo reload - Reloads %name%. Useful for debugging.
     echo cmd - Allows you to run MS-DOS/Command Prompt commands. Has a new look, courtesy of the rewrite.
 )
 if %helpvalue%=="experimental" (
@@ -512,17 +500,17 @@ if defined %pcmd% (
 
 :update
 if %enableexperiments%==true (
-    echo this is not complete yet.
+    echo this is not complete yet, but it is coming soon™
 )
 goto command
 
 :cmd
 title [%name%] Command Prompt
-for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set WINVERSION=%%i.%%j
 echo.
-echo Microsoft Windows [Version %VERSION%]
+echo Microsoft Windows [Version %WINVERSION%]
 echo (c) %author% Corporation. No rights reserved.
-echo This Command Prompt is a visual recreation of Windows Command Prompt, running under WinCMD.
+echo This Command Prompt is a visual recreation of Windows Command Prompt, running under %name%.
 if %verbosemode%==true (
     echo DEBUG: CMD recreation loaded successfully
 )
