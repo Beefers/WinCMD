@@ -31,26 +31,32 @@ Set "shellstyle=zsh" >NUL
 @REM Theme - The design of the CLI, including background colors and text colors. Default value is "wincmd" and options are: "wincmd, dark, light, aperture, lemonade, powershell"
 Set "theme=wincmd" >NUL
 
+@REM Checks
 :checkarch
 if %PROCESSOR_ARCHITECTURE%==AMD64 (
-    set "arch=AMD64"
+    set "arch=AMD64" >NUL
 )
 if %PROCESSOR_ARCHITECTURE%==IA64 (
-    set "arch=IA64"
+    set "arch=IA64" >NUL
 )
 if %PROCESSOR_ARCHITECTURE%==ARM64 (
-    set "arch=ARM64"
+    set "arch=ARM64" >NUL
 )
 if %PROCESSOR_ARCHITECTURE%==EM64T (
-    set "arch=EM64T"
+    set "arch=EM64T" >NUL
 )
 if %PROCESSOR_ARCHITECTURE%==X86 (
-    set "arch=X86"
+    set "arch=X86" >NUL
 )
+goto loadmessage
 
+:loadmessage
 cls
 echo Welcome to %name%, %slogan%.
 echo Type help to get started.
+goto displayarch
+
+:displayarch
 if %arch%==AMD64 (
     goto amd64
 )
@@ -71,7 +77,7 @@ if %arch%==X86 (
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is AMD64, continuing without warning prompt.
 )
-goto finishload
+goto devcheck
 
 :ia64
 if %verbosemode%==true (
@@ -79,7 +85,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, IA64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto finishload
+goto devcheck
 
 :arm64
 if %verbosemode%==true (
@@ -87,7 +93,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, ARM64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto finishload
+goto devcheck
 
 :em64t
 if %verbosemode%==true (
@@ -95,11 +101,23 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, EM64T.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto finishload
+goto devcheck
 
 :x86
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is x86, continuing without warning prompt.
+)
+goto devcheck
+
+:devcheck
+if %TERM_PROGRAM%==vscode (
+    echo.
+    echo Hello! We've determined that you're running %name% in the VSCode integrated terminal.
+    echo Because of this, we'll assume you're developing!
+    echo We've automatically set a few variables to true in order to assist your development: verbosemode and enableexperiments.
+    echo Enjoy!
+    Set "verbosemode=true" >NUL
+    Set "enableexperiments=true" >NUL
 )
 goto finishload
 
