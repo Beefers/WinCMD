@@ -71,7 +71,7 @@ if %arch%==X86 (
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is AMD64, continuing without warning prompt.
 )
-goto command
+goto finishload
 
 :ia64
 if %verbosemode%==true (
@@ -79,7 +79,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, IA64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto command
+goto finishload
 
 :arm64
 if %verbosemode%==true (
@@ -87,7 +87,7 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, ARM64.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto command
+goto finishload
 
 :em64t
 if %verbosemode%==true (
@@ -95,21 +95,24 @@ if %verbosemode%==true (
 )
 echo You are running %name% on an untested processor architecture, EM64T.
 echo The program will still run, but we cannot guarantee everything will work as intended.
-goto command
+goto finishload
 
 :x86
 if %verbosemode%==true (
     echo DEBUG: Processor Architecture is x86, continuing without warning prompt.
+)
+goto finishload
+
+:finishload
+if %verbosemode%==true (
+    echo.
+    echo DEBUG: Initial Load completed successfully
 )
 goto command
 
 @REM Command Handler
 @REM Initial Checks and Adjustments
 :command
-if %verbosemode%==true (
-    echo.
-    echo DEBUG: Initial Load completed successfully
-)
 title %name%, %slogan%
 if %verbosemode%==true (
     echo.
@@ -145,8 +148,8 @@ goto shellstyleprocessing
 
 @REM Shell-Style Processing
 :shellstyleprocessing
-echo.
 if %verbosemode%==true (
+    echo.
     echo DEBUG: Shell-style processing completed successfully
 )
 if %shellstyle%==zsh (
