@@ -4,7 +4,7 @@
 I decided to deprecate this project due to how much of a mess the code was. It's 521 lines, and yet, in my newest project, ZMD, I've already achieved the same goal as WinCMD in around 50 lines, in the main file.
 
 ## Don't fret, however!
-As I mentioned above, I've started work upon a project that, while similar to WinCMD, uses multiple files. It's in very early stages, and I'd appreciate any and all feedback. If you want something added, don't hesitate to leave a pull request, and I'll review them ASAP! ZMD can be found [https://github.com/Beefers/zmd](https://github.com/Beefers/zmd "ZMD")
+As I mentioned above, I've started work upon a project that, while similar to WinCMD, uses multiple files. It's in very early stages, and I'd appreciate any and all feedback. If you want something added, don't hesitate to leave a pull request, and I'll review them ASAP! ZMD can be found [here](https://github.com/Beefers/zmd "ZMD")
 
 
 # WinCMD, an open-source command line for Windows.
